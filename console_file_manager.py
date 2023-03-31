@@ -43,11 +43,26 @@
 # После выполнения какого либо из пунктов снова возвращаемся в меню, пока пользователь не выберет выход
 
 # def console_file_manager_function():
+
+
+'''
+ЗАДАНИЕ 2
+5. В программе консольный файловый менеджер есть пункт "просмотр содержимого рабочей директории";
+6. Добавить пункт "сохранить содержимое рабочей директории в файл";
+
+7. При выборе этого пункта создать файл listdir.txt (если он есть то пересоздать)
+и сохранить туда содержимое рабочей директории следующим образом: сначала все файлы, потом все папки,
+пример как может выглядеть итоговый файл.
+    files: victory.py, bill.py, main.py
+    dirs: modules, packages
+'''
+
 import os
 import shutil
 import sys
 import platform
 import pathlib
+import json
 global current_dir
 current_dir = os.getcwd()
 
@@ -63,14 +78,15 @@ def main_menu():
         2: ('Удалить (файл/папку)', remove_file_dir),
         3: ('Копировать (файл/папку)', copy_dir),
         4: ('Просмотр содержимого рабочей директории', dir_review),
-        5: ('Посмотреть только папки', review_only_dir),
-        6: ('Посмотреть только файлы', review_only_files),
-        7: ('Просмотр информации об операционной системе', os_review),
-        8: ('Создатель программы', file_owner),
-        9: ('Играть в викторину', quiz),
-        10: ('Мой банковский счет', p_account),
-        11: ('Смена рабочей директории', change_working_directory),
-        12: ('Выход', continue_or_exit),
+        5: ('Сохранить содержимое рабочей директории в файл', listdir_export),
+        6: ('Посмотреть только папки', review_only_dir),
+        7: ('Посмотреть только файлы', review_only_files),
+        8: ('Просмотр информации об операционной системе', os_review),
+        9: ('Создатель программы', file_owner),
+        10: ('Играть в викторину', quiz),
+        11: ('Мой банковский счет', p_account),
+        12: ('Смена рабочей директории', change_working_directory),
+        13: ('Выход', continue_or_exit),
     }
 
     def menu_choice():
@@ -157,6 +173,23 @@ def copy_dir():
 def dir_review():
     for item in os.listdir():
         print(item)
+
+def listdir_export():
+
+    LISTDIR_FILE = 'listdir.txt'
+
+    with open(LISTDIR_FILE, 'w') as lf:
+
+        files = []
+        dirs = []
+
+        for item in os.scandir(current_dir):
+            if item.is_file():
+                files.append(item.name)
+            elif item.is_dir():
+                dirs.append(item.name)
+
+        lf.write('Files: ' + ', '.join(files) + '\nDirs: ' + ', '.join(dirs))
 
 # - посмотреть только папки
 # вывод только папок которые находятся в рабочей папке;
